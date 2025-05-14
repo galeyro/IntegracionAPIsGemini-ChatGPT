@@ -4,7 +4,79 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <p>@ViewBag.respuesta</p>
+    <h1 class="display-4">Chatbot Demo</h1>
+    <form method="post" asp-action="Index">
+        <div class="form-group">
+            <label for="modelo">Selecciona el modelo:</label>
+            <select class="form-control" id="modelo" name="modelo">
+                <option value="Gemini">Gemini</option>
+                <option value="OpenAI">OpenAI</option>
+            </select>
+        </div>
+        <div class="form-group mt-3">
+            <label for="prompt">Ingresa tu mensaje:</label>
+            <textarea class="form-control" id="prompt" name="prompt" rows="4"></textarea>
+        </div>
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-primary">Enviar</button>
+            <button type="reset" class="btn btn-secondary">Reset</button>
+        </div>
+    </form>
+    <div class="mt-4">
+        <strong>Respuesta:</strong>
+        <p>@ViewBag.respuesta</p>
+    </div>
+
 </div>
+
+<!-- Grid de cards de compañeros -->
+<footer class="container mt-5">
+    <div class="card-group">
+        <div class="card">
+            <img src="https://avatars.githubusercontent.com/u/146785935?v=4" class="card-img-top" alt="Compañero 1">
+            <div class="card-body">
+                <h5 class="card-title">Luis Pineda</h5>
+                <p class="card-text">Apasionado por diseño UX/UI</p>
+            </div>
+            <div class="card-footer">
+                <small class="text-body-secondary">GitHub:</small>
+                <a href="https://github.com/godmath04" target="_blank" class="text-body-secondary">https://github.com/godmath04</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="https://avatars.githubusercontent.com/u/140036444?v=4" class="card-img-top" alt="Compañera 2">
+            <div class="card-body">
+                <h5 class="card-title">Julian Torres</h5>
+                <p class="card-text">Especialista en Frontend. Le encanta el diseño y la experiencia de usuario.</p>
+            </div>
+            <div class="card-footer">
+                <small class="text-body-secondary">GitHub:</small>
+                <a href="https://github.com/JulianTorresDev" target="_blank" class="text-body-secondary">https://github.com/JulianTorresDev</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="https://avatars.githubusercontent.com/u/184136904?v=4" class="card-img-top" alt="Compañero 3">
+            <div class="card-body">
+                <h5 class="card-title">Javier Arias</h5>
+                <p class="card-text">Amante de las Bases de datos.</p>
+            </div>
+            <div class="card-footer">
+                <small class="text-body-secondary">GitHub:</small>
+                <a href="https://github.com/JulianDTA2" target="_blank" class="text-body-secondary">https://github.com/JulianDTA2</a>
+            </div>
+        </div>
+        <div class="card">
+            <img src="https://avatars.githubusercontent.com/u/146301733?v=4" class="card-img-top" alt="Compañera 4">
+            <div class="card-body">
+                <h5 class="card-title">Galo Guevara</h5>
+                <p class="card-text">Backend c:</p>
+            </div>
+            <div class="card-footer">
+                <small class="text-body-secondary">GitHub:</small>
+                <a href="https://github.com/galeyro" target="_blank" class="text-body-secondary">https://github.com/galeyro</a>
+            </div>
+        </div>
+    </div>
+</footer>
