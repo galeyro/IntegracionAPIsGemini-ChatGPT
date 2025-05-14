@@ -9,11 +9,12 @@ namespace IntegracionGemini.Repositories
 {
     public class GeminiRepository : IChatbotService
     {
-        private HttpClient _httpClient;
-        private readonly string geminiApiKey="AIzaSyCOzwL0lTY9YYqR07O5gkmVnE1OY-5eGGY";
+        private HttpClient _httpClient; //HttpClient es una clase que permite hacer peticiones HTTP
+        private readonly string geminiApiKey="AIzaSyCOzwL0lTY9YYqR07O5gkmVnE1OY-5eGGY"; //Guarda API de Gemini
 
         public GeminiRepository()
         {
+            //Crea una instancia HttpClient en el campo _httpClient
             _httpClient = new HttpClient();
         }
 
@@ -36,10 +37,10 @@ namespace IntegracionGemini.Repositories
                     }
                 }
             };
-            string json_data = JsonConvert.SerializeObject(request);
-            var content = new StringContent(json_data, Encoding.UTF8, "application/json");
+            string json_data = JsonConvert.SerializeObject(request);//Convierte el objeto request a una cadena JSON
+            var content = new StringContent(json_data, Encoding.UTF8, "application/json");//content es el contenido de la peticion
             var response = await _httpClient.PostAsync(url, content); //Para cada metodo asincrono poner await
-            return await response.Content.ReadAsStringAsync();
+            return await response.Content.ReadAsStringAsync(); //Lee la respuesta de la peticion como una cadena
         }
 
         public bool GuardarRespuestaBaseDatosLocal(string prompt, string respuesta)

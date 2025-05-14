@@ -19,7 +19,7 @@ namespace IntegracionGemini.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var response = await _chatbotService.ObtenerRespuestaChatbot("Resumen de 100 palabras de Avatar");
+            var response = await _chatbotService.ObtenerRespuestaChatbot("Resumen de 100 palabras de Dragon Ball Z");
             ViewBag.respuesta = response;
             return View();
         }
