@@ -3,6 +3,7 @@ using IntegracionGemini.Interfaces;
 using IntegracionGemini.Models;
 using IntegracionGemini.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace IntegracionGemini.Controllers
 {
@@ -20,40 +21,47 @@ namespace IntegracionGemini.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            ViewBag.GeminiMessages = TempData["GeminiMessages"] != null
+                ? JsonConvert.DeserializeObject<List<ChatMessage>>(TempData["GeminiMessages"].ToString())
+                : new List<ChatMessage>();
+
+            ViewBag.OpenAIMessages = TempData["OpenAIMessages"] != null
+                ? JsonConvert.DeserializeObject<List<ChatMessage>>(TempData["OpenAIMessages"].ToString())
+                : new List<ChatMessage>();
+
+            TempData.Keep(); // Mantiene TempData para el siguiente request
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Index(string prompt, string modelo)
         {
-            if (string.IsNullOrWhiteSpace(prompt) || string.IsNullOrWhiteSpace(modelo))
-            {
-                ViewBag.respuesta = "Por favor, ingresa un mensaje y selecciona un modelo.";
-                return View();
-            }
+            var now = DateTime.Now.ToString("HH:mm");
+            List<ChatMessage> geminiMessages = TempData["GeminiMessages"] != null
+                ? JsonConvert.DeserializeObject<List<ChatMessage>>(TempData["GeminiMessages"].ToString())
+                : new List<ChatMessage>();
 
-            string respuesta = string.Empty;
+            List<ChatMessage> openAIMessages = TempData["OpenAIMessages"] != null
+                ? JsonConvert.DeserializeObject<List<ChatMessage>>(TempData["OpenAIMessages"].ToString())
+                : new List<ChatMessage>();
 
             if (modelo == "Gemini")
             {
-                respuesta = await _geminiService.ObtenerRespuestaChatbot(prompt);
+                geminiMessages.Add(new ChatMessage { User = "Tú", Text = prompt, Time = now });
+                var respuesta = await _geminiService.ObtenerRespuestaChatbot(prompt);
+                geminiMessages.Add(new ChatMessage { User = "Gemini", Text = respuesta, Time = now });
             }
             else if (modelo == "OpenAI")
             {
-                respuesta = await _openAIService.ObtenerRespuestaChatbot(prompt);
-            }
-            else
-            {
-                respuesta = "Modelo no reconocido.";
+                openAIMessages.Add(new ChatMessage { User = "Tú", Text = prompt, Time = now });
+                var respuesta = await _openAIService.ObtenerRespuestaChatbot(prompt);
+                openAIMessages.Add(new ChatMessage { User = "OpenAI", Text = respuesta, Time = now });
             }
 
-            ViewBag.respuesta = respuesta;
-            return View();
+            TempData["GeminiMessages"] = JsonConvert.SerializeObject(geminiMessages);
+            TempData["OpenAIMessages"] = JsonConvert.SerializeObject(openAIMessages);
+
+            return RedirectToAction("Index");
         }
-
-
-
-
-
     }
 }
