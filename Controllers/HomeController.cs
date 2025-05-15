@@ -4,7 +4,6 @@ using IntegracionGemini.Models;
 using IntegracionGemini.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Xunit;
 
 namespace IntegracionGemini.Controllers
 {
