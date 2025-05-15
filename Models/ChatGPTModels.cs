@@ -15,10 +15,29 @@
     usando model = "gpt-3.5-turbo" como modelo gratuito
      */
 
+
     public class ChatGPTRequest
     {
         public string model { get; set; }
         public string input { get; set; }
 
     }
+
+    public class OpenAIResponse
+    {
+        public List<Choice> choices { get; set; }
+    }
+
+    public class Choice
+    {
+        public Message message { get; set; }
+        public string text { get; set; } // Para compatibilidad con ambos formatos
+    }
+
+    public class Message
+    {
+        public string role { get; set; }
+        public string content { get; set; }
+    }
+
 }

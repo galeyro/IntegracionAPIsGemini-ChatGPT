@@ -35,7 +35,18 @@ namespace IntegracionGemini.Repositories
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", openAIApiKey);
 
             var response = await _httpClient.PostAsync(url, content);
-            return await response.Content.ReadAsStringAsync(); //Lee la respuesta de la peticion como string
+            var responseString = await response.Content.ReadAsStringAsync();
+
+            // Deserializa la respuesta y extrae solo el texto
+            var openAIResponse = JsonConvert.DeserializeObject<OpenAIResponse>(responseString);
+
+            // Para modelos tipo chat (message.content)
+            var text = openAIResponse?.choices?.FirstOrDefault()?.message?.content
+                // Para modelos tipo completions (text)
+                ?? openAIResponse?.choices?.FirstOrDefault()?.text
+                ?? "Sin respuesta";
+
+            return text;
 
         }
 
