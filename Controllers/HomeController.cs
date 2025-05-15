@@ -8,7 +8,7 @@ using Xunit;
 
 namespace IntegracionGemini.Controllers
 {
-    // Controlador principal para la p·gina de inicio y el chat
+    // Controlador principal para la p√°gina de inicio y el chat
     public class HomeController : Controller
     {
         // Servicios para interactuar con Gemini y OpenAI
@@ -22,7 +22,7 @@ namespace IntegracionGemini.Controllers
             _openAIService = openAIService;
         }
 
-        // Muestra la p·gina principal con el historial de mensajes de ambos chats
+        // Muestra la p√°gina principal con el historial de mensajes de ambos chats
         [HttpGet]
         public IActionResult Index()
         {
@@ -40,7 +40,7 @@ namespace IntegracionGemini.Controllers
             return View();
         }
 
-        // Procesa el envÌo de un mensaje a uno de los chatbots
+        // Procesa el env√≠o de un mensaje a uno de los chatbots
         [HttpPost]
         public async Task<IActionResult> Index(string prompt, string modelo, string usuario)
         {
@@ -55,7 +55,7 @@ namespace IntegracionGemini.Controllers
                 ? JsonConvert.DeserializeObject<List<ChatMessage>>(TempData["OpenAIMessages"].ToString())
                 : new List<ChatMessage>();
 
-            // Seg˙n el modelo seleccionado, envÌa el mensaje y guarda la respuesta
+            // Seg√∫n el modelo seleccionado, env√≠a el mensaje y guarda la respuesta
             if (modelo == "Gemini")
             {
                 // Agrega el mensaje del usuario
@@ -80,6 +80,7 @@ namespace IntegracionGemini.Controllers
             return RedirectToAction("Index");
         }
 
+        
 
     }
 }
