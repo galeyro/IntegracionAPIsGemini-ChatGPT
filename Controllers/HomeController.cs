@@ -10,6 +10,9 @@ namespace IntegracionGemini.Controllers
     // Controlador principal para la página de inicio y el chat
     public class HomeController : Controller
     {
+        private const string GeminiMessagesKey = "GeminiMessages";
+        private const string OpenAIMessagesKey = "OpenAIMessages";
+
         // Servicios para interactuar con Gemini y OpenAI
         private readonly GeminiRepository _geminiService;
         private readonly OpenAIRepository _openAIService;
@@ -26,13 +29,13 @@ namespace IntegracionGemini.Controllers
         public IActionResult Index()
         {
             // Recupera los mensajes de Gemini del TempData (si existen)
-            ViewBag.GeminiMessages = TempData["GeminiMessages"] != null
-                ? JsonConvert.DeserializeObject<List<ChatMessage>>(TempData["GeminiMessages"].ToString())
+            ViewBag.GeminiMessages = TempData[GeminiMessagesKey] != null
+                ? JsonConvert.DeserializeObject<List<ChatMessage>>(TempData[GeminiMessagesKey].ToString())
                 : new List<ChatMessage>();
 
             // Recupera los mensajes de OpenAI del TempData (si existen)
-            ViewBag.OpenAIMessages = TempData["OpenAIMessages"] != null
-                ? JsonConvert.DeserializeObject<List<ChatMessage>>(TempData["OpenAIMessages"].ToString())
+            ViewBag.OpenAIMessages = TempData[OpenAIMessagesKey] != null
+                ? JsonConvert.DeserializeObject<List<ChatMessage>>(TempData[OpenAIMessagesKey].ToString())
                 : new List<ChatMessage>();
 
             TempData.Keep(); // Mantiene TempData para el siguiente request
@@ -46,12 +49,12 @@ namespace IntegracionGemini.Controllers
             var now = DateTime.Now.ToString("HH:mm"); // Hora actual para mostrar en el chat
 
             // Recupera el historial de mensajes de ambos chats
-            List<ChatMessage> geminiMessages = TempData["GeminiMessages"] != null
-                ? JsonConvert.DeserializeObject<List<ChatMessage>>(TempData["GeminiMessages"].ToString())
+            List<ChatMessage> geminiMessages = TempData[GeminiMessagesKey] != null
+                ? JsonConvert.DeserializeObject<List<ChatMessage>>(TempData[GeminiMessagesKey].ToString())
                 : new List<ChatMessage>();
 
-            List<ChatMessage> openAIMessages = TempData["OpenAIMessages"] != null
-                ? JsonConvert.DeserializeObject<List<ChatMessage>>(TempData["OpenAIMessages"].ToString())
+            List<ChatMessage> openAIMessages = TempData[OpenAIMessagesKey] != null
+                ? JsonConvert.DeserializeObject<List<ChatMessage>>(TempData[OpenAIMessagesKey].ToString())
                 : new List<ChatMessage>();
 
             // Según el modelo seleccionado, envía el mensaje y guarda la respuesta
@@ -72,8 +75,8 @@ namespace IntegracionGemini.Controllers
             }
 
             // Guarda los historiales actualizados en TempData
-            TempData["GeminiMessages"] = JsonConvert.SerializeObject(geminiMessages);
-            TempData["OpenAIMessages"] = JsonConvert.SerializeObject(openAIMessages);
+            TempData[GeminiMessagesKey] = JsonConvert.SerializeObject(geminiMessages);
+            TempData[OpenAIMessagesKey] = JsonConvert.SerializeObject(openAIMessages);
 
             // Redirige a la vista principal para mostrar el chat actualizado
             return RedirectToAction("Index");
