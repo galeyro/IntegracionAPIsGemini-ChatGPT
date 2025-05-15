@@ -28,3 +28,32 @@ body {
     object-fit: cover;
     border-radius: 50%;
 }
+
+.navbar-animated-bg {
+    background: linear-gradient(270deg, #ffb347, #ffcc33, #6dd5ed, #2193b0, #ee9ca7, #ffdde1, #ffb347);
+    background-size: 1400% 1400%;
+    animation: gradientBG 20s ease infinite;
+    transition: background 0.5s;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    25% {
+        background-position: 50% 100%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    75% {
+        background-position: 50% 0%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
