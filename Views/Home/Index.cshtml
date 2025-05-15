@@ -5,23 +5,113 @@
 
 <div class="text-center">
     <h1 class="display-4">Chatbot Demo</h1>
-    <form method="post" asp-action="Index">
-        <div class="form-group">
-            <label for="modelo">Selecciona el modelo:</label>
-            <select class="form-control" id="modelo" name="modelo">
-                <option value="Gemini">Gemini</option>
-                <option value="OpenAI">OpenAI</option>
-            </select>
+    <section>
+        <div class="text-center">
+            <h1 class="display-4">Chatbot Demo</h1>
+            <section>
+                <div class="container py-5">
+                    <!-- Lista de chats (Modelos) arriba -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h5 class="fw-bold mb-3 text-center">Modelos</h5>
+                            <div class="card mx-auto" style="max-width: 500px;">
+                                <div class="card-body p-0">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsokcTZ4l3iLFFwBJf96pafY42rwG_w6jyNg&s" alt="Gemini" class="rounded-circle me-3" width="50">
+                                            <div>
+                                                <div class="fw-bold">Gemini</div>
+                                                <div class="text-muted small">Chatbot de Google</div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968866.png" alt="OpenAI" class="rounded-circle me-3" width="50">
+                                            <div>
+                                                <div class="fw-bold">OpenAI</div>
+                                                <div class="text-muted small">Chatbot de OpenAI</div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Ventanas de chat lado a lado -->
+                    <div class="row">
+                        <!-- Ventana de chat Gemini -->
+                        <div class="col-md-6 mb-4">
+                            <h5 class="fw-bold mb-3 text-center">Chat Gemini</h5>
+                            <div class="card shadow">
+                                <div class="card-body" style="height: 350px; overflow-y: auto; background: #f8f9fa;">
+                                    <ul class="list-unstyled mb-0">
+                                        @if (ViewBag.GeminiMessages != null)
+                                        {
+                                            foreach (var msg in ViewBag.GeminiMessages)
+                                            {
+                                                <li class="mb-3">
+                                                    <div class="d-flex">
+                                                        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968778.png" class="rounded-circle me-2" width="40">
+                                                        <div>
+                                                            <div class="fw-bold">@msg.User</div>
+                                                            <div class="small text-muted">@msg.Time</div>
+                                                            <div class="bg-white rounded p-2 mt-1 shadow-sm">@msg.Text</div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                                <div class="card-footer bg-white">
+                                    <form method="post" asp-action="Index" class="d-flex">
+                                        <input type="hidden" name="modelo" value="Gemini" />
+                                        <input type="text" name="prompt" class="form-control me-2" placeholder="Escribe tu mensaje..." autocomplete="off" />
+                                        <button type="submit" class="btn btn-primary">Enviar</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Ventana de chat OpenAI -->
+                        <div class="col-md-6 mb-4">
+                            <h5 class="fw-bold mb-3 text-center">Chat OpenAI</h5>
+                            <div class="card shadow">
+                                <div class="card-body" style="height: 350px; overflow-y: auto; background: #f8f9fa;">
+                                    <ul class="list-unstyled mb-0">
+                                        @if (ViewBag.OpenAIMessages != null)
+                                        {
+                                            foreach (var msg in ViewBag.OpenAIMessages)
+                                            {
+                                                <li class="mb-3">
+                                                    <div class="d-flex">
+                                                        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968866.png" class="rounded-circle me-2" width="40">
+                                                        <div>
+                                                            <div class="fw-bold">@msg.User</div>
+                                                            <div class="small text-muted">@msg.Time</div>
+                                                            <div class="bg-white rounded p-2 mt-1 shadow-sm">@msg.Text</div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                                <div class="card-footer bg-white">
+                                    <form method="post" asp-action="Index" class="d-flex">
+                                        <input type="hidden" name="modelo" value="OpenAI" />
+                                        <input type="text" name="prompt" class="form-control me-2" placeholder="Escribe tu mensaje..." autocomplete="off" />
+                                        <button type="submit" class="btn btn-success">Enviar</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
-        <div class="form-group mt-3">
-            <label for="prompt">Ingresa tu mensaje:</label>
-            <textarea class="form-control" id="prompt" name="prompt" rows="4"></textarea>
-        </div>
-        <div class="form-group mt-3">
-            <button type="submit" class="btn btn-primary">Enviar</button>
-            <button type="reset" class="btn btn-secondary">Reset</button>
-        </div>
-    </form>
+
+    </section>
+
+
     <div class="mt-4">
         <strong>Respuesta:</strong>
         <p>@ViewBag.respuesta</p>
