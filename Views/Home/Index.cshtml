@@ -2,6 +2,8 @@
     ViewData["Title"] = "Home Page";
 
 }
+@using Markdig
+
 
 <div>
     <div class="text-center">
@@ -39,7 +41,10 @@
                                                 <div>
                                                     <span class="fw-bold">@message.User</span>
                                                     <span class="chat-time small text-muted">@message.Time</span>
-                                                    <div class="bg-white rounded p-2 mt-1 shadow-sm">@message.Text</div>
+                                                    <div class="bg-white rounded p-2 mt-1 shadow-sm">
+                                                        @Html.Raw(Markdown.ToHtml(message.Text ?? ""))
+                                                    </div>
+
                                                 </div>
 
                                             </div>
@@ -104,7 +109,7 @@
             <!-- Lista de chats (Modelos) arriba -->
             <div class="row mb-4">
                 <div class="col-12">
-                    <h5 class="fw-bold mb-3 text-center">Modelos</h5>
+                    <h5 class="fw-bold mb-3 text-center">Modelos utilizados</h5>
                     <div class="card mx-auto" style="max-width: 500px;">
                         <div class="card-body p-0">
                             <ul class="list-group list-group-flush">
