@@ -40,7 +40,13 @@ namespace IntegracionGemini.Repositories
             string json_data = JsonConvert.SerializeObject(request);//Convierte el objeto request a una cadena JSON
             var content = new StringContent(json_data, Encoding.UTF8, "application/json");//content es el contenido de la peticion
             var response = await _httpClient.PostAsync(url, content); //Para cada metodo asincrono poner await
-            return await response.Content.ReadAsStringAsync(); //Lee la respuesta de la peticion como una cadena
+            var responseString = await response.Content.ReadAsStringAsync();
+
+            // Deserializa el JSON y extrae el texto
+            var geminiResponse = JsonConvert.DeserializeObject<GeminiResponse>(responseString);
+            var text = geminiResponse?.candidates?.FirstOrDefault()?.content?.parts?.FirstOrDefault()?.text ?? "Sin respuesta";
+
+            return text;
         }
 
         public bool GuardarRespuestaBaseDatosLocal(string prompt, string respuesta)
