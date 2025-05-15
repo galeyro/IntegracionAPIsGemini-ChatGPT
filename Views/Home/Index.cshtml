@@ -1,23 +1,23 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
-
 }
 @using Markdig
 
-
 <div>
     <div class="text-center">
-
+        <!-- Título y subtítulo del proyecto -->
         <blockquote class="blockquote">
             <h1 class="mb-0">
                 AriasGuevaraPinedaTorresBOT
             </h1>
             <p></p>
-            <footer class="blockquote-footer">Conectados a las IA's usando <cite title="Source Title">API's y VibeCoding</cite></footer>
+            <footer class="blockquote-footer">
+                Conectados a las IA's usando <cite title="Source Title">API's y VibeCoding</cite>
+            </footer>
         </blockquote>
 
         <section>
-
+            <!-- Selector de usuario para el chat -->
             <div class="row mb-4">
                 <div class="col-12 col-md-4 mx-auto">
                     <form id="userSelectForm" class="d-flex align-items-center" onsubmit="return false;">
@@ -32,9 +32,7 @@
                 </div>
             </div>
 
-
             <div class="container py-5">
-
                 <!-- Ventanas de chat lado a lado -->
                 <div class="row">
                     <!-- Ventana de chat Gemini -->
@@ -42,55 +40,52 @@
                         <h5 class="fw-bold mb-3 text-center">Chat Gemini</h5>
                         <div class="card shadow">
                             <div class="card-body" id="gemini-chat-window" style="height: 600px; overflow-y: auto; background: #f8f9fa;">
-
                                 @{
+                                    // Diccionario para asociar usuario con su imagen
                                     var userImages = new Dictionary<string, string>
-                                {
-                                { "Luis", "https://avatars.githubusercontent.com/u/146785935?v=4" },
-                                { "Julian", "https://avatars.githubusercontent.com/u/140036444?v=4" },
-                                { "Javier", "https://avatars.githubusercontent.com/u/184136904?v=4" },
-                                { "Galo", "https://avatars.githubusercontent.com/u/146301733?v=4" }
-                                };
+                                    {
+                                        { "Luis", "https://avatars.githubusercontent.com/u/146785935?v=4" },
+                                        { "Julian", "https://avatars.githubusercontent.com/u/140036444?v=4" },
+                                        { "Javier", "https://avatars.githubusercontent.com/u/184136904?v=4" },
+                                        { "Galo", "https://avatars.githubusercontent.com/u/146301733?v=4" }
+                                    };
                                 }
-
-
-
                                 <ul class="list-unstyled mb-0">
+                                    @* Muestra los mensajes del chat Gemini *@
                                     @if (ViewBag.GeminiMessages != null)
                                     {
                                         @foreach (var message in ViewBag.GeminiMessages)
                                         {
                                             <div class="chat-message d-flex align-items-center mb-2">
+                                                <!-- Imagen del usuario o del bot -->
                                                 <img src="@(userImages.ContainsKey(message.User)
                                                     ? userImages[message.User]
                                                     : "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Google_Bard_logo.svg/1200px-Google_Bard_logo.svg.png")"
                                                      alt="@message.User"
                                                      class="chat-avatar me-2"
                                                      onerror="this.onerror=null;this.src='@Url.Content("~/images/default.png")';" />
-
                                                 <div>
+                                                    <!-- Nombre y hora del mensaje -->
                                                     <span class="fw-bold">@message.User</span>
                                                     <span class="chat-time small text-muted">@message.Time</span>
+                                                    <!-- Contenido del mensaje (soporta Markdown) -->
                                                     <div class="bg-white rounded p-2 mt-1 shadow-sm">
                                                         @Html.Raw(Markdown.ToHtml(message.Text ?? ""))
                                                     </div>
-
                                                 </div>
-
                                             </div>
                                         }
-
                                     }
                                 </ul>
                             </div>
                             <div class="card-footer bg-white">
+                                <!-- Formulario para enviar mensaje a Gemini -->
                                 <form method="post" asp-controller="Home" asp-action="Index" class="d-flex">
                                     <input type="hidden" name="modelo" value="Gemini" />
                                     <input type="hidden" name="usuario" id="usuarioInputGemini" value="Galo" />
                                     <input type="text" name="prompt" class="form-control me-2" placeholder="Escribe tu mensaje..." autocomplete="off" />
                                     <button type="submit" class="btn btn-primary">Enviar</button>
                                 </form>
-
                             </div>
                         </div>
                     </div>
@@ -99,47 +94,48 @@
                         <h5 class="fw-bold mb-3 text-center">Chat OpenAI</h5>
                         <div class="card shadow">
                             <div class="card-body" id="openai-chat-window" style="height: 600px; overflow-y: auto; background: #f8f9fa;">
-
                                 <ul class="list-unstyled mb-0">
+                                    @* Muestra los mensajes del chat OpenAI *@
                                     @if (ViewBag.OpenAIMessages != null)
                                     {
                                         @foreach (var msg in ViewBag.OpenAIMessages)
                                         {
                                             <div class="chat-message d-flex align-items-center mb-2">
-                                                    <img src="@(userImages.ContainsKey(msg.User)
+                                                <!-- Imagen del usuario o del bot -->
+                                                <img src="@(userImages.ContainsKey(msg.User)
                                                     ? userImages[msg.User]
                                                     : "https://static-00.iconduck.com/assets.00/openai-icon-2021x2048-4rpe5x7n.png")"
                                                      alt="@msg.User"
                                                      class="chat-avatar me-2"
                                                      onerror="this.onerror=null;this.src='@Url.Content("~/images/default.png")';" />
-
                                                 <div>
+                                                    <!-- Nombre y hora del mensaje -->
                                                     <span class="fw-bold">@msg.User</span>
                                                     <span class="chat-time small text-muted">@msg.Time</span>
+                                                    <!-- Contenido del mensaje (soporta Markdown) -->
                                                     <div class="bg-white rounded p-2 mt-1 shadow-sm">
                                                         @Html.Raw(Markdown.ToHtml(msg.Text ?? ""))
                                                     </div>
                                                 </div>
                                             </div>
                                         }
-
                                     }
                                 </ul>
                             </div>
                             <div class="card-footer bg-white">
+                                <!-- Formulario para enviar mensaje a OpenAI -->
                                 <form method="post" asp-controller="Home" asp-action="Index" class="d-flex">
                                     <input type="hidden" name="modelo" value="OpenAI" />
                                     <input type="hidden" name="usuario" id="usuarioInputOpenAI" value="Galo" />
                                     <input type="text" name="prompt" class="form-control me-2" placeholder="Escribe tu mensaje..." autocomplete="off" />
                                     <button type="submit" class="btn btn-primary">Enviar</button>
                                 </form>
-
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Lista de chats (Modelos) arriba -->
+            <!-- Lista de modelos utilizados -->
             <div class="row mb-4">
                 <div class="col-12">
                     <h5 class="fw-bold mb-3 text-center">Modelos utilizados</h5>
@@ -167,12 +163,13 @@
             </div>
         </section>
     </div>
-
 </div>
 
 <!-- Grid de cards de compañeros -->
 <footer class="container mt-5">
     <div class="card-group">
+        <!-- Card de cada compañero con su imagen y GitHub -->
+        <!-- Luis -->
         <div class="card">
             <img src="https://avatars.githubusercontent.com/u/146785935?v=4" class="card-img-top" alt="Compañero 1">
             <div class="card-body">
@@ -184,7 +181,7 @@
                 <a href="https://github.com/godmath04" target="_blank" class="text-body-secondary">https://github.com/godmath04</a>
             </div>
         </div>
-
+        <!-- Julian -->
         <div class="card">
             <img src="https://avatars.githubusercontent.com/u/140036444?v=4" class="card-img-top" alt="Compañera 2">
             <div class="card-body">
@@ -196,7 +193,7 @@
                 <a href="https://github.com/JulianTorresDev" target="_blank" class="text-body-secondary">https://github.com/JulianTorresDev</a>
             </div>
         </div>
-
+        <!-- Javier -->
         <div class="card">
             <img src="https://avatars.githubusercontent.com/u/184136904?v=4" class="card-img-top" alt="Compañero 3">
             <div class="card-body">
@@ -208,6 +205,7 @@
                 <a href="https://github.com/JulianDTA2" target="_blank" class="text-body-secondary">https://github.com/JulianDTA2</a>
             </div>
         </div>
+        <!-- Galo -->
         <div class="card">
             <img src="https://avatars.githubusercontent.com/u/146301733?v=4" class="card-img-top" alt="Compañera 4">
             <div class="card-body">
@@ -223,7 +221,7 @@
 </footer>
 
 <script>
-    // Función para hacer scroll al fondo de un contenedor
+    // Función para hacer scroll automático al fondo del chat
     function scrollToBottom(id) {
         var el = document.getElementById(id);
         if (el) {
@@ -231,7 +229,7 @@
         }
     }
 
-    // Ejecutar al cargar la página
+    // Al cargar la página, hace scroll al fondo de ambos chats
     window.onload = function () {
         scrollToBottom('gemini-chat-window');
         scrollToBottom('openai-chat-window');
@@ -239,12 +237,14 @@
 </script>
 
 <script>
+    // Sincroniza el usuario seleccionado con los formularios de chat
     document.getElementById('userSelect').addEventListener('change', function () {
         var selectedUser = this.value;
         document.getElementById('usuarioInputGemini').value = selectedUser;
         document.getElementById('usuarioInputOpenAI').value = selectedUser;
     });
 
+    // Inicializa los campos ocultos con el usuario seleccionado al cargar la página
     window.onload = function () {
         var selectedUser = document.getElementById('userSelect').value;
         document.getElementById('usuarioInputGemini').value = selectedUser;

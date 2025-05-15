@@ -1,57 +1,44 @@
 ﻿namespace IntegracionGemini.Models
 {
-    /*
-     Segun la doc de ChatGPT, nos pide la siguiente solicitud para texto:
-
-    curl "https://api.openai.com/v1/responses" \
-    -H "Content-Type: application/json" \
-    -H "Authorization: Bearer $OPENAI_API_KEY" \
-    -d '{
-        "model": "gpt-4.1",
-        "input": "Write a one-sentence bedtime story about a unicorn."
-    }'
-
-    Por tal motivo, es sufiuciente tener dos atributos model y input, 
-    usando model = "gpt-3.5-turbo" como modelo gratuito
-     */
-
-
+    // Modelo para enviar un prompt simple a la API de OpenAI
     public class ChatGPTRequest
     {
-        public string model { get; set; }
-        public string input { get; set; }
-
+        public string model { get; set; }   // Nombre del modelo a usar (ej: "gpt-3.5-turbo")
+        public string input { get; set; }   // Texto del prompt
     }
 
+    // Modelo para deserializar la respuesta de OpenAI
     public class OpenAIResponse
     {
-        public List<Choice> choices { get; set; }
+        public List<Choice> choices { get; set; } // Lista de posibles respuestas
     }
 
+    // Representa una opción de respuesta de OpenAI
     public class Choice
     {
-        public Message message { get; set; }
-        public string text { get; set; } // Para compatibilidad con ambos formatos
+        public Message message { get; set; } // Mensaje estructurado (chat)
+        public string text { get; set; }     // Texto plano (para compatibilidad)
     }
 
+    // Mensaje individual en una conversación (chat)
     public class Message
     {
-        public string role { get; set; }
-        public string content { get; set; }
+        public string role { get; set; }     // Rol: "user", "assistant", etc.
+        public string content { get; set; }  // Contenido del mensaje
     }
 
+    // Modelo para enviar un chat con historial a la API de OpenAI
     public class OpenAIChatRequest
     {
-        public string model { get; set; }
-        public bool store { get; set; } = true;
-        public List<OpenAIMessage> messages { get; set; }
+        public string model { get; set; }    // Nombre del modelo a usar
+        public bool store { get; set; } = true; // Indica si se almacena el historial
+        public List<OpenAIMessage> messages { get; set; } // Historial de mensajes
     }
 
+    // Mensaje en el historial de chat de OpenAI
     public class OpenAIMessage
     {
-        public string role { get; set; }
-        public string content { get; set; }
+        public string role { get; set; }     // Rol del mensaje
+        public string content { get; set; }  // Contenido del mensaje
     }
-
-
 }
