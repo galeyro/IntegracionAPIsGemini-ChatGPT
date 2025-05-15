@@ -13,12 +13,12 @@
                 AriasGuevaraPinedaTorresBOT
             </h1>
             <p></p>
-            <footer class="blockquote-footer">Conectados a las IA's usando <cite title="Source Title">API's</cite></footer>
+            <footer class="blockquote-footer">Conectados a las IA's usando <cite title="Source Title">API's y VibeCoding</cite></footer>
         </blockquote>
 
         <section>
             <div class="container py-5">
-                
+
                 <!-- Ventanas de chat lado a lado -->
                 <div class="row">
                     <!-- Ventana de chat Gemini -->
@@ -26,7 +26,7 @@
                         <h5 class="fw-bold mb-3 text-center">Chat Gemini</h5>
                         <div class="card shadow">
                             <div class="card-body" id="gemini-chat-window" style="height: 600px; overflow-y: auto; background: #f8f9fa;">
-                                
+
                                 <ul class="list-unstyled mb-0">
                                     @if (ViewBag.GeminiMessages != null)
                                     {
@@ -51,8 +51,6 @@
                                             </div>
                                         }
 
-
-
                                     }
                                 </ul>
                             </div>
@@ -70,31 +68,28 @@
                         <h5 class="fw-bold mb-3 text-center">Chat OpenAI</h5>
                         <div class="card shadow">
                             <div class="card-body" id="openai-chat-window" style="height: 600px; overflow-y: auto; background: #f8f9fa;">
-                                
+
                                 <ul class="list-unstyled mb-0">
                                     @if (ViewBag.OpenAIMessages != null)
                                     {
                                         @foreach (var msg in ViewBag.OpenAIMessages)
                                         {
-                                            <li class="mb-3">
-                                                <div class="d-flex align-items-center">
-                                                    <img src="@(msg.User == "Tú"
-                                                         ? "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
-                                                         : "https://static-00.iconduck.com/assets.00/openai-icon-2021x2048-4rpe5x7n.png")"
-                                                         alt="@msg.User"
-                                                         class="chat-avatar me-2"
-                                                         onerror="this.onerror=null;this.src='@Url.Content("~/images/default.png")';" />
-                                                    <div>
-                                                        <div class="fw-bold">@msg.User</div>
-                                                        <div class="small text-muted">@msg.Time</div>
-                                                        <div class="bg-white rounded p-2 mt-1 shadow-sm">
-                                                            @Html.Raw(Markdown.ToHtml(msg.Text ?? ""))
-                                                        </div>
+                                            <div class="chat-message d-flex align-items-center mb-2">
+                                                <img src="@(msg.User == "Tú"
+                                                     ? "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+                                                     : "https://static-00.iconduck.com/assets.00/openai-icon-2021x2048-4rpe5x7n.png")"
+                                                     alt="@msg.User"
+                                                     class="chat-avatar me-2"
+                                                     onerror="this.onerror=null;this.src='@Url.Content("~/images/default.png")';" />
+                                                <div>
+                                                    <span class="fw-bold">@msg.User</span>
+                                                    <span class="chat-time small text-muted">@msg.Time</span>
+                                                    <div class="bg-white rounded p-2 mt-1 shadow-sm">
+                                                        @Html.Raw(Markdown.ToHtml(msg.Text ?? ""))
                                                     </div>
                                                 </div>
-                                            </li>
+                                            </div>
                                         }
-
 
                                     }
                                 </ul>
@@ -103,7 +98,7 @@
                                 <form method="post" asp-action="Index" class="d-flex">
                                     <input type="hidden" name="modelo" value="OpenAI" />
                                     <input type="text" name="prompt" class="form-control me-2" placeholder="Escribe tu mensaje..." autocomplete="off" />
-                                    <button type="submit" class="btn btn-success">Enviar</button>
+                                    <button type="submit" class="btn btn-primary">Enviar</button>
                                 </form>
                             </div>
                         </div>
