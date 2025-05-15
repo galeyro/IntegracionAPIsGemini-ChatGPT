@@ -87,7 +87,9 @@
                                                     <div>
                                                         <div class="fw-bold">@msg.User</div>
                                                         <div class="small text-muted">@msg.Time</div>
-                                                        <div class="bg-white rounded p-2 mt-1 shadow-sm">@msg.Text</div>
+                                                        <div class="bg-white rounded p-2 mt-1 shadow-sm">
+                                                            @Html.Raw(Markdown.ToHtml(msg.Text ?? ""))
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </li>

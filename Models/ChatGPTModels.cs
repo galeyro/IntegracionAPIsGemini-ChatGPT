@@ -40,4 +40,18 @@
         public string content { get; set; }
     }
 
+    public class OpenAIChatRequest
+    {
+        public string model { get; set; }
+        public bool store { get; set; } = true;
+        public List<OpenAIMessage> messages { get; set; }
+    }
+
+    public class OpenAIMessage
+    {
+        public string role { get; set; }
+        public string content { get; set; }
+    }
+
+
 }

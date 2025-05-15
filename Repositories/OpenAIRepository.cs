@@ -12,7 +12,7 @@ namespace IntegracionGemini.Repositories
     public class OpenAIRepository : IChatbotService
     {
         private readonly HttpClient _httpClient;
-        private readonly string openAIApiKey = "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";
+        private readonly string openAIApiKey = "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";
 
         public OpenAIRepository()
         {
@@ -20,34 +20,31 @@ namespace IntegracionGemini.Repositories
         }
         public async Task<string> ObtenerRespuestaChatbot(string prompt)
         {
-            string url = "https://api.openai.com/v1/responses";
-            var request = new ChatGPTRequest
+            string url = "https://api.openai.com/v1/chat/completions";
+            var request = new OpenAIChatRequest
             {
-                model = "gpt-4.1-nano", //Modelo más economico
-                input= prompt
-
+                model = "gpt-4o-mini",
+                store = true,
+                messages = new List<OpenAIMessage>
+        {
+            new OpenAIMessage { role = "user", content = prompt }
+        }
             };
 
             string json_data = JsonConvert.SerializeObject(request);
             var content = new StringContent(json_data, Encoding.UTF8, "application/json");
 
-            //Agregamos el header de autorizacion
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", openAIApiKey);
 
             var response = await _httpClient.PostAsync(url, content);
             var responseString = await response.Content.ReadAsStringAsync();
 
-            // Deserializa la respuesta y extrae solo el texto
             var openAIResponse = JsonConvert.DeserializeObject<OpenAIResponse>(responseString);
 
-            // Para modelos tipo chat (message.content)
             var text = openAIResponse?.choices?.FirstOrDefault()?.message?.content
-                // Para modelos tipo completions (text)
-                ?? openAIResponse?.choices?.FirstOrDefault()?.text
                 ?? "Sin respuesta";
 
-            return responseString;
-
+            return text;
         }
 
         public bool GuardarRespuestaBaseDatosLocal(string prompt, string respuesta)
