@@ -18,8 +18,6 @@
 
         <section>
 
-            <div><p></p></div>
-
             <div class="row mb-4">
                 <div class="col-12 col-md-4 mx-auto">
                     <form id="userSelectForm" class="d-flex align-items-center" onsubmit="return false;">
@@ -51,12 +49,13 @@
                                         @foreach (var message in ViewBag.GeminiMessages)
                                         {
                                             <div class="chat-message d-flex align-items-center mb-2">
-                                                <img src="@(message.User == "Tú"
+                                                <img src="@(message.User == "Galo" || message.User == "Luis" || message.User == "Javier" || message.User == "Julian"
                                                      ? "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
                                                      : "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Google_Bard_logo.svg/1200px-Google_Bard_logo.svg.png")"
                                                      alt="@message.User"
                                                      class="chat-avatar me-2"
                                                      onerror="this.onerror=null;this.src='@Url.Content("~/images/default.png")';" />
+
                                                 <div>
                                                     <span class="fw-bold">@message.User</span>
                                                     <span class="chat-time small text-muted">@message.Time</span>
@@ -73,11 +72,13 @@
                                 </ul>
                             </div>
                             <div class="card-footer bg-white">
-                                <form method="post" asp-action="Index" class="d-flex">
+                                <form method="post" asp-controller="Home" asp-action="Index" class="d-flex">
                                     <input type="hidden" name="modelo" value="Gemini" />
+                                    <input type="hidden" name="usuario" id="usuarioInputGemini" value="Galo" />
                                     <input type="text" name="prompt" class="form-control me-2" placeholder="Escribe tu mensaje..." autocomplete="off" />
                                     <button type="submit" class="btn btn-primary">Enviar</button>
                                 </form>
+
                             </div>
                         </div>
                     </div>
@@ -93,12 +94,13 @@
                                         @foreach (var msg in ViewBag.OpenAIMessages)
                                         {
                                             <div class="chat-message d-flex align-items-center mb-2">
-                                                <img src="@(msg.User == "Tú"
+                                                <img src="@(msg.User == "Galo" || msg.User == "Luis" || msg.User == "Javier" || msg.User == "Julian"
                                                      ? "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
                                                      : "https://static-00.iconduck.com/assets.00/openai-icon-2021x2048-4rpe5x7n.png")"
                                                      alt="@msg.User"
                                                      class="chat-avatar me-2"
                                                      onerror="this.onerror=null;this.src='@Url.Content("~/images/default.png")';" />
+
                                                 <div>
                                                     <span class="fw-bold">@msg.User</span>
                                                     <span class="chat-time small text-muted">@msg.Time</span>
@@ -113,11 +115,13 @@
                                 </ul>
                             </div>
                             <div class="card-footer bg-white">
-                                <form method="post" asp-action="Index" class="d-flex">
+                                <form method="post" asp-controller="Home" asp-action="Index" class="d-flex">
                                     <input type="hidden" name="modelo" value="OpenAI" />
+                                    <input type="hidden" name="usuario" id="usuarioInputOpenAI" value="Galo" />
                                     <input type="text" name="prompt" class="form-control me-2" placeholder="Escribe tu mensaje..." autocomplete="off" />
                                     <button type="submit" class="btn btn-primary">Enviar</button>
                                 </form>
+
                             </div>
                         </div>
                     </div>
@@ -222,3 +226,18 @@
     };
 </script>
 
+<script>
+    document.getElementById('userSelect').addEventListener('change', function () {
+        var selectedUser = this.value;
+        document.getElementById('usuarioInputGemini').value = selectedUser;
+        document.getElementById('usuarioInputOpenAI').value = selectedUser;
+    });
+
+    window.onload = function () {
+        var selectedUser = document.getElementById('userSelect').value;
+        document.getElementById('usuarioInputGemini').value = selectedUser;
+        document.getElementById('usuarioInputOpenAI').value = selectedUser;
+        scrollToBottom('gemini-chat-window');
+        scrollToBottom('openai-chat-window');
+    };
+</script>

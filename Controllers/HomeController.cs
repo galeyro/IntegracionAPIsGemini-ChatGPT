@@ -34,7 +34,7 @@ namespace IntegracionGemini.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(string prompt, string modelo)
+        public async Task<IActionResult> Index(string prompt, string modelo, string usuario)
         {
             var now = DateTime.Now.ToString("HH:mm");
             List<ChatMessage> geminiMessages = TempData["GeminiMessages"] != null
@@ -47,13 +47,13 @@ namespace IntegracionGemini.Controllers
 
             if (modelo == "Gemini")
             {
-                geminiMessages.Add(new ChatMessage { User = "Tú", Text = prompt, Time = now });
+                geminiMessages.Add(new ChatMessage { User = usuario, Text = prompt, Time = now });
                 var respuesta = await _geminiService.ObtenerRespuestaChatbot(prompt);
                 geminiMessages.Add(new ChatMessage { User = "Gemini", Text = respuesta, Time = now });
             }
             else if (modelo == "OpenAI")
             {
-                openAIMessages.Add(new ChatMessage { User = "Tú", Text = prompt, Time = now });
+                openAIMessages.Add(new ChatMessage { User = usuario, Text = prompt, Time = now });
                 var respuesta = await _openAIService.ObtenerRespuestaChatbot(prompt);
                 openAIMessages.Add(new ChatMessage { User = "OpenAI", Text = respuesta, Time = now });
             }
