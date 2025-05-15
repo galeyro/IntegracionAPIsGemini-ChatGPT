@@ -43,15 +43,27 @@
                         <div class="card shadow">
                             <div class="card-body" id="gemini-chat-window" style="height: 600px; overflow-y: auto; background: #f8f9fa;">
 
+                                @{
+                                    var userImages = new Dictionary<string, string>
+                                {
+                                { "Luis", "https://avatars.githubusercontent.com/u/146785935?v=4" },
+                                { "Julian", "https://avatars.githubusercontent.com/u/140036444?v=4" },
+                                { "Javier", "https://avatars.githubusercontent.com/u/184136904?v=4" },
+                                { "Galo", "https://avatars.githubusercontent.com/u/146301733?v=4" }
+                                };
+                                }
+
+
+
                                 <ul class="list-unstyled mb-0">
                                     @if (ViewBag.GeminiMessages != null)
                                     {
                                         @foreach (var message in ViewBag.GeminiMessages)
                                         {
                                             <div class="chat-message d-flex align-items-center mb-2">
-                                                <img src="@(message.User == "Galo" || message.User == "Luis" || message.User == "Javier" || message.User == "Julian"
-                                                     ? "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
-                                                     : "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Google_Bard_logo.svg/1200px-Google_Bard_logo.svg.png")"
+                                                <img src="@(userImages.ContainsKey(message.User)
+                                                    ? userImages[message.User]
+                                                    : "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Google_Bard_logo.svg/1200px-Google_Bard_logo.svg.png")"
                                                      alt="@message.User"
                                                      class="chat-avatar me-2"
                                                      onerror="this.onerror=null;this.src='@Url.Content("~/images/default.png")';" />
@@ -94,9 +106,9 @@
                                         @foreach (var msg in ViewBag.OpenAIMessages)
                                         {
                                             <div class="chat-message d-flex align-items-center mb-2">
-                                                <img src="@(msg.User == "Galo" || msg.User == "Luis" || msg.User == "Javier" || msg.User == "Julian"
-                                                     ? "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
-                                                     : "https://static-00.iconduck.com/assets.00/openai-icon-2021x2048-4rpe5x7n.png")"
+                                                    <img src="@(userImages.ContainsKey(msg.User)
+                                                    ? userImages[msg.User]
+                                                    : "https://static-00.iconduck.com/assets.00/openai-icon-2021x2048-4rpe5x7n.png")"
                                                      alt="@msg.User"
                                                      class="chat-avatar me-2"
                                                      onerror="this.onerror=null;this.src='@Url.Content("~/images/default.png")';" />
