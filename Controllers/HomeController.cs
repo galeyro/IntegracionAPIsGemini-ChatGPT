@@ -4,6 +4,7 @@ using IntegracionGemini.Models;
 using IntegracionGemini.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Xunit;
 
 namespace IntegracionGemini.Controllers
 {
@@ -78,5 +79,24 @@ namespace IntegracionGemini.Controllers
             // Redirige a la vista principal para mostrar el chat actualizado
             return RedirectToAction("Index");
         }
+
+        [Fact]
+        public async Task UsuarioPuedePreguntarAmbosModelos()
+        {
+            // Arrange: Simula el envío de preguntas a ambos modelos
+            var controller = new HomeController(...); // Inyecta dependencias mock o reales
+            await controller.Index("Pregunta a Gemini", "Gemini", "Luis");
+            await controller.Index("Pregunta a OpenAI", "OpenAI", "Luis");
+
+            // Act: Recupera los mensajes
+            var result = controller.Index() as ViewResult;
+            var geminiMessages = result.ViewBag.GeminiMessages as List<ChatMessage>;
+            var openAIMessages = result.ViewBag.OpenAIMessages as List<ChatMessage>;
+
+            // Assert: Verifica que el usuario preguntó en ambos modelos
+            Assert.Contains(geminiMessages, m => m.User == "Luis");
+            Assert.Contains(openAIMessages, m => m.User == "Luis");
+        }
+
     }
 }
