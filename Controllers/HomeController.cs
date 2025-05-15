@@ -8,7 +8,7 @@ using Xunit;
 
 namespace IntegracionGemini.Controllers
 {
-    // Controlador principal para la página de inicio y el chat
+    // Controlador principal para la pÃ¡gina de inicio y el chat
     public class HomeController : Controller
     {
         // Servicios para interactuar con Gemini y OpenAI
@@ -22,7 +22,7 @@ namespace IntegracionGemini.Controllers
             _openAIService = openAIService;
         }
 
-        // Muestra la página principal con el historial de mensajes de ambos chats
+        // Muestra la pÃ¡gina principal con el historial de mensajes de ambos chats
         [HttpGet]
         public IActionResult Index()
         {
@@ -40,7 +40,7 @@ namespace IntegracionGemini.Controllers
             return View();
         }
 
-        // Procesa el envío de un mensaje a uno de los chatbots
+        // Procesa el envÃ­o de un mensaje a uno de los chatbots
         [HttpPost]
         public async Task<IActionResult> Index(string prompt, string modelo, string usuario)
         {
@@ -55,7 +55,7 @@ namespace IntegracionGemini.Controllers
                 ? JsonConvert.DeserializeObject<List<ChatMessage>>(TempData["OpenAIMessages"].ToString())
                 : new List<ChatMessage>();
 
-            // Según el modelo seleccionado, envía el mensaje y guarda la respuesta
+            // SegÃºn el modelo seleccionado, envÃ­a el mensaje y guarda la respuesta
             if (modelo == "Gemini")
             {
                 // Agrega el mensaje del usuario
@@ -78,24 +78,6 @@ namespace IntegracionGemini.Controllers
 
             // Redirige a la vista principal para mostrar el chat actualizado
             return RedirectToAction("Index");
-        }
-
-        [Fact]
-        public async Task UsuarioPuedePreguntarAmbosModelos()
-        {
-            // Arrange: Simula el envío de preguntas a ambos modelos
-            var controller = new HomeController(...); // Inyecta dependencias mock o reales
-            await controller.Index("Pregunta a Gemini", "Gemini", "Luis");
-            await controller.Index("Pregunta a OpenAI", "OpenAI", "Luis");
-
-            // Act: Recupera los mensajes
-            var result = controller.Index() as ViewResult;
-            var geminiMessages = result.ViewBag.GeminiMessages as List<ChatMessage>;
-            var openAIMessages = result.ViewBag.OpenAIMessages as List<ChatMessage>;
-
-            // Assert: Verifica que el usuario preguntó en ambos modelos
-            Assert.Contains(geminiMessages, m => m.User == "Luis");
-            Assert.Contains(openAIMessages, m => m.User == "Luis");
         }
 
     }
