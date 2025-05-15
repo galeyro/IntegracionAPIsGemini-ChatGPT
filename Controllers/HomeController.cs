@@ -8,22 +8,52 @@ namespace IntegracionGemini.Controllers
 {
     public class HomeController : Controller
     {
-        private IChatbotService _chatbotService;
+        private readonly GeminiRepository _geminiService;
+        private readonly OpenAIRepository _openAIService;
 
-        public HomeController(IChatbotService chatbotService)
+        public HomeController(GeminiRepository geminiService, OpenAIRepository openAIService)
         {
-
-            _chatbotService = chatbotService;
-  
+            _geminiService = geminiService;
+            _openAIService = openAIService;
         }
 
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public IActionResult Index()
         {
-            var response = await _chatbotService.ObtenerRespuestaChatbot("Resumen de 100 palabras de Dragon Ball Z");
-            ViewBag.respuesta = response;
             return View();
         }
 
- 
+        [HttpPost]
+        public async Task<IActionResult> Index(string prompt, string modelo)
+        {
+            if (string.IsNullOrWhiteSpace(prompt) || string.IsNullOrWhiteSpace(modelo))
+            {
+                ViewBag.respuesta = "Por favor, ingresa un mensaje y selecciona un modelo.";
+                return View();
+            }
+
+            string respuesta = string.Empty;
+
+            if (modelo == "Gemini")
+            {
+                respuesta = await _geminiService.ObtenerRespuestaChatbot(prompt);
+            }
+            else if (modelo == "OpenAI")
+            {
+                respuesta = await _openAIService.ObtenerRespuestaChatbot(prompt);
+            }
+            else
+            {
+                respuesta = "Modelo no reconocido.";
+            }
+
+            ViewBag.respuesta = respuesta;
+            return View();
+        }
+
+
+
+
+
     }
 }
