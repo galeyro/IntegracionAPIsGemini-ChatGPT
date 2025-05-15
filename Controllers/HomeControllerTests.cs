@@ -29,7 +29,7 @@ public class HomeControllerTests
             new DefaultHttpContext(),
             Mock.Of<ITempDataProvider>());
         controller.TempData = tempData;
-        
+
         // Act: El usuario pregunta a ambos modelos  
         await controller.Index("Pregunta a Gemini", "Gemini", "Luis");
         await controller.Index("Pregunta a OpenAI", "OpenAI", "Luis");
