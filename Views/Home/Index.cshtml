@@ -25,7 +25,8 @@
                     <div class="col-md-6 mb-4">
                         <h5 class="fw-bold mb-3 text-center">Chat Gemini</h5>
                         <div class="card shadow">
-                            <div class="card-body" style="height: 350px; overflow-y: auto; background: #f8f9fa;">
+                            <div class="card-body" id="gemini-chat-window" style="height: 600px; overflow-y: auto; background: #f8f9fa;">
+                                
                                 <ul class="list-unstyled mb-0">
                                     @if (ViewBag.GeminiMessages != null)
                                     {
@@ -68,7 +69,8 @@
                     <div class="col-md-6 mb-4">
                         <h5 class="fw-bold mb-3 text-center">Chat OpenAI</h5>
                         <div class="card shadow">
-                            <div class="card-body" style="height: 350px; overflow-y: auto; background: #f8f9fa;">
+                            <div class="card-body" id="openai-chat-window" style="height: 600px; overflow-y: auto; background: #f8f9fa;">
+                                
                                 <ul class="list-unstyled mb-0">
                                     @if (ViewBag.OpenAIMessages != null)
                                     {
@@ -188,3 +190,20 @@
         </div>
     </div>
 </footer>
+
+<script>
+    // Función para hacer scroll al fondo de un contenedor
+    function scrollToBottom(id) {
+        var el = document.getElementById(id);
+        if (el) {
+            el.scrollTop = el.scrollHeight;
+        }
+    }
+
+    // Ejecutar al cargar la página
+    window.onload = function () {
+        scrollToBottom('gemini-chat-window');
+        scrollToBottom('openai-chat-window');
+    };
+</script>
+

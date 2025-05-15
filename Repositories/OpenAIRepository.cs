@@ -12,7 +12,7 @@ namespace IntegracionGemini.Repositories
     public class OpenAIRepository : IChatbotService
     {
         private readonly HttpClient _httpClient;
-        private readonly string openAIApiKey = "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";
+        private readonly string openAIApiKey = "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";
 
         public OpenAIRepository()
         {
@@ -23,7 +23,7 @@ namespace IntegracionGemini.Repositories
             string url = "https://api.openai.com/v1/responses";
             var request = new ChatGPTRequest
             {
-                model = "gpt-3.5-turbo", //Modelo gratuito en teoría
+                model = "gpt-4.1-nano", //Modelo más economico
                 input= prompt
 
             };
@@ -46,7 +46,7 @@ namespace IntegracionGemini.Repositories
                 ?? openAIResponse?.choices?.FirstOrDefault()?.text
                 ?? "Sin respuesta";
 
-            return text;
+            return responseString;
 
         }
 
