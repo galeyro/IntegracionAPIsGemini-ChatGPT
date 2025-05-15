@@ -52,19 +52,25 @@
                                 <ul class="list-unstyled mb-0">
                                     @if (ViewBag.GeminiMessages != null)
                                     {
-                                        foreach (var msg in ViewBag.GeminiMessages)
+                                        @foreach (var message in ViewBag.GeminiMessages)
                                         {
-                                            <li class="mb-3">
-                                                <div class="d-flex">
-                                                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968778.png" class="rounded-circle me-2" width="40">
-                                                    <div>
-                                                        <div class="fw-bold">@msg.User</div>
-                                                        <div class="small text-muted">@msg.Time</div>
-                                                        <div class="bg-white rounded p-2 mt-1 shadow-sm">@msg.Text</div>
-                                                    </div>
+                                            <div class="chat-message d-flex align-items-center mb-2">
+                                                <img src="@(message.User == "Tú"
+                                                     ? "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+                                                     : "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Google_Bard_logo.svg/1200px-Google_Bard_logo.svg.png")"
+                                                     alt="@message.User"
+                                                     class="chat-avatar me-2"
+                                                     onerror="this.onerror=null;this.src='@Url.Content("~/images/default.png")';" />
+                                                <div>
+                                                    <span class="fw-bold">@message.User</span>
+                                                    <span class="chat-time small text-muted">@message.Time</span>
+                                                    <div class="chat-text">@message.Text</div>
                                                 </div>
-                                            </li>
+                                            </div>
                                         }
+
+
+
                                     }
                                 </ul>
                             </div>
@@ -85,11 +91,16 @@
                                 <ul class="list-unstyled mb-0">
                                     @if (ViewBag.OpenAIMessages != null)
                                     {
-                                        foreach (var msg in ViewBag.OpenAIMessages)
+                                        @foreach (var msg in ViewBag.OpenAIMessages)
                                         {
                                             <li class="mb-3">
-                                                <div class="d-flex">
-                                                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968866.png" class="rounded-circle me-2" width="40">
+                                                <div class="d-flex align-items-center">
+                                                    <img src="@(msg.User == "Tú"
+                                                         ? "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+                                                         : "https://cdn-icons-png.flaticon.com/512/5968/5968866.png")"
+                                                         alt="@msg.User"
+                                                         class="chat-avatar me-2"
+                                                         onerror="this.onerror=null;this.src='@Url.Content("~/images/default.png")';" />
                                                     <div>
                                                         <div class="fw-bold">@msg.User</div>
                                                         <div class="small text-muted">@msg.Time</div>
@@ -98,6 +109,8 @@
                                                 </div>
                                             </li>
                                         }
+
+
                                     }
                                 </ul>
                             </div>

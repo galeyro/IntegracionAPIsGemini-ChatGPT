@@ -20,3 +20,11 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/* wwwroot/css/site.css */
+.chat-avatar {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 50%;
+}
