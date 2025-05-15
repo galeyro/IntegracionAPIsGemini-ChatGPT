@@ -9,7 +9,7 @@ namespace IntegracionGemini.Repositories
 {
     public class GeminiRepository : IChatbotService
     {
-        private HttpClient _httpClient; //HttpClient es una clase que permite hacer peticiones HTTP
+        private readonly HttpClient _httpClient; //HttpClient es una clase que permite hacer peticiones HTTP
         private readonly string geminiApiKey="AIzaSyCOzwL0lTY9YYqR07O5gkmVnE1OY-5eGGY"; //Guarda API de Gemini
 
         public GeminiRepository()

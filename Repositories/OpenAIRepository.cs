@@ -12,21 +12,19 @@ namespace IntegracionGemini.Repositories
     {
         // Cliente HTTP para enviar solicitudes a la API
         private readonly HttpClient _httpClient;
+        private readonly string _apiKey;
+        private readonly string _baseUrl;
 
-        // Clave de API de OpenAI (debería protegerse en producción)
-        private readonly string openAIApiKey = "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";
-
-        public OpenAIRepository()
+        public OpenAIRepository(IConfiguration configuration)
         {
-            // Inicializa el cliente HTTP
             _httpClient = new HttpClient();
+            _apiKey = configuration["OpenAI:ApiKey"];
+            _baseUrl = configuration["OpenAI:BaseUrl"];
         }
 
         // Envía un prompt a la API de OpenAI y devuelve la respuesta del chatbot
         public async Task<string> ObtenerRespuestaChatbot(string prompt)
         {
-            string url = "https://api.openai.com/v1/chat/completions";
-
             // Construye la solicitud con el modelo y el mensaje del usuario
             var request = new OpenAIChatRequest
             {
@@ -43,10 +41,10 @@ namespace IntegracionGemini.Repositories
             var content = new StringContent(json_data, Encoding.UTF8, "application/json");
 
             // Agrega la cabecera de autorización
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", openAIApiKey);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
 
             // Envía la solicitud POST a la API
-            var response = await _httpClient.PostAsync(url, content);
+            var response = await _httpClient.PostAsync(_baseUrl, content);
             var responseString = await response.Content.ReadAsStringAsync();
 
             // Deserializa la respuesta de la API

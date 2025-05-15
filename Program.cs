@@ -6,6 +6,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddScoped<GeminiRepository>();
+builder.Services.AddScoped<OpenAIRepository>();
+
 builder.Services.AddSingleton<GeminiRepository>();
 builder.Services.AddSingleton<OpenAIRepository>();
 
