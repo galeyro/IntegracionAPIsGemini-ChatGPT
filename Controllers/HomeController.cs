@@ -3,6 +3,7 @@ using IntegracionGemini.Interfaces;
 using IntegracionGemini.Models;
 using IntegracionGemini.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace IntegracionGemini.Controllers
@@ -17,11 +18,17 @@ namespace IntegracionGemini.Controllers
         private readonly GeminiRepository _geminiService;
         private readonly OpenAIRepository _openAIService;
 
+
+        // Contexto de la base de datos
+        private readonly AppDbContext _context;
+
+
         // Constructor: recibe las dependencias de los servicios
-        public HomeController(GeminiRepository geminiService, OpenAIRepository openAIService)
+        public HomeController(GeminiRepository geminiService, OpenAIRepository openAIService, AppDbContext context)
         {
             _geminiService = geminiService;
             _openAIService = openAIService;
+            _context = context;
         }
 
         // Muestra la página principal con el historial de mensajes de ambos chats
@@ -66,12 +73,36 @@ namespace IntegracionGemini.Controllers
                 var respuesta = await _geminiService.ObtenerRespuestaChatbot(prompt);
                 // Agrega la respuesta del bot
                 geminiMessages.Add(new ChatMessage { User = "Gemini", Text = respuesta, Time = now });
+
+                //Guardar respuesta en la BD de Gemini
+                var nuevaRespuesta = new RespuestaIA
+                {
+                    Respuesta = respuesta,
+                    Fecha = DateTime.Now,
+                    Proveedor = "Gemini",
+                    GuardadoPor = usuario
+                };
+                _context.RespuestasIA.Add(nuevaRespuesta);
+                await _context.SaveChangesAsync();
+
+
             }
             else if (modelo == "OpenAI")
             {
                 openAIMessages.Add(new ChatMessage { User = usuario, Text = prompt, Time = now });
                 var respuesta = await _openAIService.ObtenerRespuestaChatbot(prompt);
                 openAIMessages.Add(new ChatMessage { User = "OpenAI", Text = respuesta, Time = now });
+
+                var nuevaRespuesta = new RespuestaIA
+                {
+                    Respuesta = respuesta,
+                    Fecha = DateTime.Now,
+                    Proveedor = "Gemini",
+                    GuardadoPor = usuario
+                };
+                _context.RespuestasIA.Add(nuevaRespuesta);
+                await _context.SaveChangesAsync();
+
             }
 
             // Guarda los historiales actualizados en TempData
