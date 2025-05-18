@@ -1,5 +1,9 @@
+using System;
 using IntegracionGemini.Interfaces;
+using IntegracionGemini.Models;
 using IntegracionGemini.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +15,12 @@ builder.Services.AddScoped<OpenAIRepository>();
 
 builder.Services.AddSingleton<GeminiRepository>();
 builder.Services.AddSingleton<OpenAIRepository>();
+
+
+// Servicio para la BD
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 var app = builder.Build();
 
