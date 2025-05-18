@@ -36,11 +36,13 @@ namespace IntegracionGemini.Controllers
         public IActionResult Index()
         {
             // Recupera los mensajes de Gemini del TempData (si existen)
+            ViewBag.SelectedUserGemini = TempData["SelectedUserGemini"]?.ToString() ?? "Galo";
             ViewBag.GeminiMessages = TempData[GeminiMessagesKey] != null
                 ? JsonConvert.DeserializeObject<List<ChatMessage>>(TempData[GeminiMessagesKey].ToString())
                 : new List<ChatMessage>();
 
             // Recupera los mensajes de OpenAI del TempData (si existen)
+            ViewBag.SelectedUserOpenAI = TempData["SelectedUserOpenAI"]?.ToString() ?? "Galo";
             ViewBag.OpenAIMessages = TempData[OpenAIMessagesKey] != null
                 ? JsonConvert.DeserializeObject<List<ChatMessage>>(TempData[OpenAIMessagesKey].ToString())
                 : new List<ChatMessage>();
@@ -51,7 +53,8 @@ namespace IntegracionGemini.Controllers
 
         // Procesa el envío de un mensaje a uno de los chatbots
         [HttpPost]
-        public async Task<IActionResult> Index(string prompt, string modelo, string usuario)
+        public async Task<IActionResult> Index(string prompt, string modelo, string usuarioGemini, string usuarioOpenAI)
+
         {
             var now = DateTime.Now.ToString("HH:mm"); // Hora actual para mostrar en el chat
 
@@ -68,7 +71,7 @@ namespace IntegracionGemini.Controllers
             if (modelo == "Gemini")
             {
                 // Agrega el mensaje del usuario
-                geminiMessages.Add(new ChatMessage { User = usuario, Text = prompt, Time = now });
+                geminiMessages.Add(new ChatMessage { User = usuarioGemini, Text = prompt, Time = now });
                 // Obtiene la respuesta del bot Gemini
                 var respuesta = await _geminiService.ObtenerRespuestaChatbot(prompt);
                 // Agrega la respuesta del bot
@@ -80,7 +83,7 @@ namespace IntegracionGemini.Controllers
                     Respuesta = respuesta,
                     Fecha = DateTime.Now,
                     Proveedor = "Gemini",
-                    GuardadoPor = usuario
+                    GuardadoPor = usuarioGemini
                 };
                 _context.RespuestasIA.Add(nuevaRespuesta);
                 await _context.SaveChangesAsync();
@@ -89,7 +92,7 @@ namespace IntegracionGemini.Controllers
             }
             else if (modelo == "OpenAI")
             {
-                openAIMessages.Add(new ChatMessage { User = usuario, Text = prompt, Time = now });
+                openAIMessages.Add(new ChatMessage { User = usuarioOpenAI, Text = prompt, Time = now });
                 var respuesta = await _openAIService.ObtenerRespuestaChatbot(prompt);
                 openAIMessages.Add(new ChatMessage { User = "OpenAI", Text = respuesta, Time = now });
 
@@ -97,8 +100,8 @@ namespace IntegracionGemini.Controllers
                 {
                     Respuesta = respuesta,
                     Fecha = DateTime.Now,
-                    Proveedor = "Gemini",
-                    GuardadoPor = usuario
+                    Proveedor = "OpenAI",
+                    GuardadoPor = usuarioOpenAI
                 };
                 _context.RespuestasIA.Add(nuevaRespuesta);
                 await _context.SaveChangesAsync();
@@ -108,6 +111,11 @@ namespace IntegracionGemini.Controllers
             // Guarda los historiales actualizados en TempData
             TempData[GeminiMessagesKey] = JsonConvert.SerializeObject(geminiMessages);
             TempData[OpenAIMessagesKey] = JsonConvert.SerializeObject(openAIMessages);
+
+            //Guardar ultimo usuario que envio la peticion 
+            TempData["SelectedUserGemini"] = usuarioGemini;
+            TempData["SelectedUserOpenAI"] = usuarioOpenAI;
+
 
             // Redirige a la vista principal para mostrar el chat actualizado
             return RedirectToAction("Index");

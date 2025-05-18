@@ -18,17 +18,24 @@
 
         <section>
             <!-- Selector de usuario para el chat -->
-            <div class="row mb-4">
-                <div class="col-12 col-md-4 mx-auto">
-                    <form id="userSelectForm" class="d-flex align-items-center" onsubmit="return false;">
-                        <label for="userSelect" class="me-2 fw-bold">Usuario:</label>
-                        <select class="form-select" id="userSelect" name="userSelect" aria-label="Selecciona usuario">
-                            <option value="Galo">Galo</option>
-                            <option value="Luis">Luis</option>
-                            <option value="Javier">Javier</option>
-                            <option value="Julian">Julian</option>
-                        </select>
-                    </form>
+            <<div class="row mb-4 justify-content-center">
+                <div class="col-12 col-md-4">
+                    <label for="userGeminiSelect" class="fw-bold">Usuario Gemini:</label>
+                    <select class="form-select" id="userGeminiSelect" name="userGeminiSelect" aria-label="Usuario Gemini">
+                        <option value="Galo" selected="@(ViewBag.SelectedUserGemini == "Galo")">Galo</option>
+                        <option value="Luis" selected="@(ViewBag.SelectedUserGemini == "Luis")">Luis</option>
+                        <option value="Javier" selected="@(ViewBag.SelectedUserGemini == "Javier")">Javier</option>
+                        <option value="Julian" selected="@(ViewBag.SelectedUserGemini == "Julian")">Julian</option>
+                    </select>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label for="userOpenAISelect" class="fw-bold">Usuario ChatGPT:</label>
+                    <select class="form-select" id="userOpenAISelect" name="userOpenAISelect" aria-label="Usuario OpenAI">
+                        <option value="Galo" selected="@(ViewBag.SelectedUserOpenAI == "Galo")">Galo</option>
+                        <option value="Luis" selected="@(ViewBag.SelectedUserOpenAI == "Luis")">Luis</option>
+                        <option value="Javier" selected="@(ViewBag.SelectedUserOpenAI == "Javier")">Javier</option>
+                        <option value="Julian" selected="@(ViewBag.SelectedUserOpenAI == "Julian")">Julian</option>
+                    </select>
                 </div>
             </div>
 
@@ -82,7 +89,9 @@
                                 <!-- Formulario para enviar mensaje a Gemini -->
                                 <form method="post" asp-controller="Home" asp-action="Index" class="d-flex">
                                     <input type="hidden" name="modelo" value="Gemini" />
-                                    <input type="hidden" name="usuario" id="usuarioInputGemini" value="Galo" />
+                                    <input type="hidden" name="usuarioGemini" id="usuarioInputGemini" value="@ViewBag.SelectedUserGemini" />
+                                    <input type="hidden" name="userGeminiSelect" id="userGeminiSelectHidden" value="Galo" />
+
                                     <input type="text" name="prompt" class="form-control me-2" placeholder="Escribe tu mensaje..." autocomplete="off" />
                                     <button type="submit" class="btn btn-primary">Enviar</button>
                                 </form>
@@ -126,7 +135,10 @@
                                 <!-- Formulario para enviar mensaje a OpenAI -->
                                 <form method="post" asp-controller="Home" asp-action="Index" class="d-flex">
                                     <input type="hidden" name="modelo" value="OpenAI" />
-                                    <input type="hidden" name="usuario" id="usuarioInputOpenAI" value="Galo" />
+                                    <input type="hidden" name="usuarioOpenAI" id="usuarioInputOpenAI" value="@ViewBag.SelectedUserOpenAI" />
+
+                                    <input type="hidden" name="userOpenAISelect" id="userOpenAISelectHidden" value="Galo" />
+
                                     <input type="text" name="prompt" class="form-control me-2" placeholder="Escribe tu mensaje..." autocomplete="off" />
                                     <button type="submit" class="btn btn-primary">Enviar</button>
                                 </form>
@@ -237,18 +249,22 @@
 </script>
 
 <script>
-    // Sincroniza el usuario seleccionado con los formularios de chat
-    document.getElementById('userSelect').addEventListener('change', function () {
-        var selectedUser = this.value;
-        document.getElementById('usuarioInputGemini').value = selectedUser;
-        document.getElementById('usuarioInputOpenAI').value = selectedUser;
+    // Sincroniza los selectores de usuario individuales con los inputs ocultos
+        document.getElementById('userGeminiSelect').addEventListener('change', function () {
+        document.getElementById('usuarioInputGemini').value = this.value;
+        document.getElementById('userGeminiSelectHidden').value = this.value;
     });
 
-    // Inicializa los campos ocultos con el usuario seleccionado al cargar la página
+        document.getElementById('userOpenAISelect').addEventListener('change', function () {
+        document.getElementById('usuarioInputOpenAI').value = this.value;
+        document.getElementById('userOpenAISelectHidden').value = this.value;
+    });
+
+    // Inicializa los campos ocultos con los usuarios seleccionados al cargar la página
     window.onload = function () {
-        var selectedUser = document.getElementById('userSelect').value;
-        document.getElementById('usuarioInputGemini').value = selectedUser;
-        document.getElementById('usuarioInputOpenAI').value = selectedUser;
+        document.getElementById('usuarioInputGemini').value = document.getElementById('userGeminiSelect').value;
+        document.getElementById('usuarioInputOpenAI').value = document.getElementById('userOpenAISelect').value;
+
         scrollToBottom('gemini-chat-window');
         scrollToBottom('openai-chat-window');
     };
